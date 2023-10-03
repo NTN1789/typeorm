@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/Create.user.dto";
 import { UpdatePutUserDto } from "./dto/Update-Put.user.dto" ;
 import { UpdatePatchUserDto } from "./dto/Update-Patch.user.dto"
@@ -21,6 +21,20 @@ export class  UserService{
       async  create( {email,nome,senha}:CreateUserDto){
          
         // e igual no prisma 
+
+        if (
+                await this.usersRepository.exist({
+                  where: {
+                 
+                      
+                    email: email,
+                  },
+                })
+              ) {
+                throw new BadRequestException('Este e-mail já está sendo usado.');
+               
+        }
+
               const user = this.usersRepository.create({
                         email,
                         nome,
@@ -55,6 +69,7 @@ export class  UserService{
         // chamar um usuario só pelo id e chave da tabela 
 
         async show(id:number){
+                await this.exists(id);
 
         return await this.usersRepository.findOneBy({
                       
@@ -71,13 +86,13 @@ export class  UserService{
 
         async update(id:number , {email,nome,senha,birthAt, role}:UpdatePutUserDto){
               // verificando se o usuario existe para não ocorrer error de criar dois usuario
-            
+            await this.exists(id);
               
                 if(!birthAt) {
                         birthAt = null // se não tiver data e vazio ou nular
                 }
         
-             return await  this.usersRepository.update(id,{
+              await  this.usersRepository.update(id,{
                      // tem que ter dois dados no update 
                                 email,
                                 nome,
@@ -89,7 +104,7 @@ export class  UserService{
               });
 
         
-        
+              return this.show(id);
         }
 
 
@@ -98,7 +113,7 @@ export class  UserService{
 
         async updateAndPatch(id:number , {email,nome,senha,birthAt,role}:UpdatePatchUserDto){
         
-             
+             await this.exists(id);
                 const data: any = {};
 
                 if(birthAt) {
@@ -126,7 +141,7 @@ export class  UserService{
         data.role = role;   
 }
 
-              return await  this.usersRepository.update( id,{
+            await  this.usersRepository.update( id,{
                      
                                  email,
                                   nome,
@@ -136,6 +151,8 @@ export class  UserService{
                                               
                 
                 });
+
+                return this.show(id);
  
         }
 
@@ -149,9 +166,9 @@ export class  UserService{
         // vai retornar um excessão  de que não achou o usuario
         
 
-        return await this.usersRepository.delete({id})
+ await this.usersRepository.delete(id);
      
-
+        return true;
 
 }     
 
@@ -163,8 +180,8 @@ export class  UserService{
 
         if (!(await  this.usersRepository.exist({
             where: {
-                id
-            }
+                id,
+            },
         }))) {
             throw new NotFoundException(`O usuário ${id} não existe.`);
         

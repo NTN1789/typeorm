@@ -99,10 +99,7 @@ export class AuthService{
        const user =  await this.usersRepository.findOneBy({   
                     // vai procurar a pessoa que o o email cadastrado no banco e a senha correta , se der certo vai autenticar o usuario
                     email,
-             
-
-                    
-                   
+                    senha                  
             });
  
             // se não tiver o usuario passado no email e senha 
@@ -112,19 +109,15 @@ export class AuthService{
                 // se o usuario passou do erro a cima é que deu certo o login 
                 console.log(user);
                   
-                return await this.createToken(user);
-                 
-            
-
-
-     
+                return  this.createToken(user);
         }
 
+       
         async recuperacaoDeSenha(email:string){
             // e o mesmo processo do que o login só mudar trocando o where e alguns detalhes 
 
             
-      const user =  await this.usersRepository.findBy({
+      const user =  await this.usersRepository.findOneBy({
             
             
                 // vai procurar a pessoa que o o email cadastrado no banco  , se der certo vai autenticar o usuario
@@ -142,15 +135,17 @@ export class AuthService{
             // TO DO : enviar email para o usuario
           
           const token =  this.jwtService.sign({
-             id: user,
+             id: user.id,
              
           } ,{
       
               expiresIn: "7 days",
-              subject:String(user),
+              subject:String(user.id),
               issuer: 'recuperacaoDeSenha' , 
               audience:'users' ,
           });
+
+      
         
           
             return true
@@ -169,6 +164,11 @@ export class AuthService{
               audience:'users' ,
 
           });
+
+          if(isNaN(Number(data.id))){
+            throw new BadRequestException('Token inválido')
+          
+          }
            
              await this.usersRepository.update(Number(data.id),{
                  senha
