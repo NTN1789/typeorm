@@ -22,7 +22,6 @@ export class LogInterceptor implements NestInterceptor{
                 
 
                 // vendo a quantidade de tempo que demora para criar um usuario ou ver algo do CRUD
-
                 console.log(`URL: ${req.url}`);
                 console.log(`METHOD: ${req.method}`);
                 console.log(`Execução levou: ${Date.now() - dt} milisegundos.`);

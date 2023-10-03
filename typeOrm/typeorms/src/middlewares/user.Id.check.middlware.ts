@@ -16,11 +16,7 @@ export class  UserIdCheckMiddleware implements NestMiddleware {
       } 
       console.log('userIdcheckMiddlware', 'depois')
       
-      
       next();
-
-
-
     }
 
 }

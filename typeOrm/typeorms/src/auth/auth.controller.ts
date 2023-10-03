@@ -47,7 +47,6 @@ export class authCotroller{
             return await this.authService.recuperacaoDeSenha(email);
         }
 
-
         @Post('reset') // trocar a senha 
 
         async reset(@Body() {senha,token}:AuthResetDto){
@@ -56,7 +55,7 @@ export class authCotroller{
         }
 
 
-        @UseGuards(AuthGuard) // proteção de rotas
+        @UseGuards(AuthGuard) // proteção de rotas para só os admin acessar 
         @Post('me') 
 
         async me(@User('email') user){
@@ -98,7 +97,7 @@ export class authCotroller{
 
 
         @UseInterceptors(FilesInterceptor('files'))
-        @UseGuards(AuthGuard) // proteção de rotas
+        @UseGuards(AuthGuard) // proteção de rotas para os usúarios
         @Post('files') 
         async  uploadFiles(@User() user , @UploadedFiles() files:Express.Multer.File[]){
                                             // o uploadedFiles pegar vários arquivos
@@ -111,13 +110,12 @@ export class authCotroller{
         @UseInterceptors(FileFieldsInterceptor([{
             name: 'photo' ,
             maxCount: 1         // quantidade de arquivos dentro do da  foto 
-
-       
+     
         } ,{
             name: 'documents',
             maxCount: 10 
         } ]))
-        @UseGuards(AuthGuard) // proteção de rotas
+        @UseGuards(AuthGuard) // proteção de rotas para o admin acessar 
         @Post('files-fileds') 
         async  uploadFilesFileds(@User() user , @UploadedFiles() files:{photo : Express.Multer.File , documents: Express.Multer.File[]}){
                                             // o uploadedFiles pegar vários arquivos
@@ -125,18 +123,6 @@ export class authCotroller{
   
         
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 

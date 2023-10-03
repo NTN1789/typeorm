@@ -15,7 +15,7 @@ import { UserEntity } from "src/user/entity/user.entinty";
             secret:String (process.env.JWT_SECRET)
      }),
      
-     forwardRef(() => UserModule),
+     forwardRef(() => UserModule), // faz a comunicação com o UserModule é para usar 
    
        // tem que exportar ainda para usar ele pelo o proprio user.modulo , na parte de exports . para poder usar em outros lugares 
        // para ter acesso ao banco de dados

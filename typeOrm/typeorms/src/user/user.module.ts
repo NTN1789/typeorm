@@ -10,7 +10,7 @@ import { UserEntity } from "./entity/user.entinty";
 // importando o PrismaModule para aplicação não dar erro 
 @Module({
     imports:[
-        forwardRef(()  => AuthModule),
+        forwardRef(()  => AuthModule), // fazendo comunicação ao Auth
         TypeOrmModule.forFeature([UserEntity])
     ],
   // importando o prismaModule para usar no service tem que fazer uma comunicação entre o prisma module

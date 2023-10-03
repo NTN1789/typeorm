@@ -9,7 +9,7 @@ import { AuthGuard } from "src/auth/guards/auth.guard";
 import { RoleGuard } from "src/guardParaUser/role.guard";
 import { LogInterceptor } from "src/interceptions/log.interceptor";
 
-@Roles(Role.admin)
+@Roles(Role.admin) // só o admin pode mexer nessas rotas 
 @UseGuards(AuthGuard,RoleGuard)   // todas as rotas vai ter o guard que eu criei 
 @UseInterceptors(LogInterceptor) // todas as rotas será interceptada
 @Controller('users')

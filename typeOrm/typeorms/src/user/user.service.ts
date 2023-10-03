@@ -20,7 +20,7 @@ export class  UserService{
 
       async  create( {email,nome,senha}:CreateUserDto){
          
-        // e igual no prisma 
+        // verificação se o email já está sendo usado 
 
         if (
                 await this.usersRepository.exist({
@@ -34,7 +34,6 @@ export class  UserService{
                 throw new BadRequestException('Este e-mail já está sendo usado.');
                
         }
-
               const user = this.usersRepository.create({
                         email,
                         nome,
@@ -42,47 +41,27 @@ export class  UserService{
                 })
                 
               return  this.usersRepository.save(user);
-        
-
-
               
                // leitura de todos os usuarios o READ 
-
         }
+
         // para fazer leitura , são o metodos que tem o find no inicio , isso e padrão do prisma 
-                
-        
-        async listUsuario(){
+         async listUsuario(){
                   return await this.usersRepository.find({
-                   //     where: {
-                     //           email : {
-                               //         contains: "@gmail.com" // vai listar todos que tem gmail 
-                       //         }  
-                       // }
-                   }); 
-       
-       
+
+                  }); 
        
                 }
-
 
         // chamar um usuario só pelo id e chave da tabela 
 
         async show(id:number){
                 await this.exists(id);
 
-        return await this.usersRepository.findOneBy({
-                      
-                                id
-                         
-                         
+        return await this.usersRepository.findOneBy({     
+                                id       
                      });     
-      
-
-      
-      
                 }
-// cuidado com o updateMany ele alterar todos os registros , e o update ele altera somente um registro
 
         async update(id:number , {email,nome,senha,birthAt, role}:UpdatePutUserDto){
               // verificando se o usuario existe para não ocorrer error de criar dois usuario
@@ -91,7 +70,6 @@ export class  UserService{
                 if(!birthAt) {
                         birthAt = null // se não tiver data e vazio ou nular
                 }
-        
               await  this.usersRepository.update(id,{
                      // tem que ter dois dados no update 
                                 email,
@@ -99,17 +77,9 @@ export class  UserService{
                                 senha ,
                                 birthAt: birthAt ? new Date(birthAt) : null, 
                                 role        
-                      
-          
               });
-
-        
               return this.show(id);
         }
-
-
-
-
 
         async updateAndPatch(id:number , {email,nome,senha,birthAt,role}:UpdatePatchUserDto){
         
@@ -140,26 +110,16 @@ export class  UserService{
    if (role) {
         data.role = role;   
 }
-
             await  this.usersRepository.update( id,{
                      
                                  email,
                                   nome,
                                   senha,
                                   birthAt,
-                                  role
-                                              
-                
+                                  role      
                 });
-
                 return this.show(id);
- 
         }
-
-                // metodo delete 
-                // no delete tem dois metódos 
-                // no delete é uma chave única 
-                // no deleteMany é qualque campo se especificar 
      async delete (id:number){
         await this.exists(id);
         // se  o retorno disso não for nada , não encontrou nada  e
