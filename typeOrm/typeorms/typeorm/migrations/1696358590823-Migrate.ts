@@ -1,51 +1,6 @@
-/
+import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-
-
-configurando nos imports 
-
-
-  TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: "",
-      port: 3306,
-      username: "",
-      password: "",
-      database: "",
-      entities:[],
-      synchronize: true,  // tomar cuidado com o  synchronize para não usar na produção 
-    })
-
-
-
-
-migrations no typeORM 
-
-criando scrpits para ficar fácil 
-
-no package json
-   "typeorm:ts": "typeorm-ts-node-esm " , 
-    "migrate:create":"npm run typeorm:ts migration create -- ./typeorm/migrations/Migrate" ,
-          "migrate:up":"npm run typeorm:ts migration:run -- -d ./typeorm/data-source.ts"     //depois do -- -d é o caminho que vai executar 
-           // para executar o banco e criar algo 
-
-
-    vai criar uma pasta com a migrate 
-
-
-
-    metódo Up dentro da migrate é quando vc ta fazendo 
-    uma nova versão do migrate 
-
-
-    metódo down e desfazer o migrate
-
-
-
-    // CURRENT_TIMESTAMP() essa função pegar o momento atual
-
-
-    estrutura da tabela
+export class Migrate1696358590823 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
    
@@ -94,13 +49,12 @@ no package json
 
         }]    
         }));
-    } 
+    }
 
-
-    para desfazer algo é so ir no down
-
-        public async down(queryRunner: QueryRunner): Promise<void> {
+    public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable("users");
     
     
     }
+
+}
