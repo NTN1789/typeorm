@@ -16,3 +16,9 @@ configurando nos imports
       synchronize: true,  // tomar cuidado com o  synchronize para não usar na produção 
     })
 
+
+
+
+migrations no typeORM 
+
+criando scrpits para ficar fácil 
