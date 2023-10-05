@@ -1,13 +1,20 @@
 import { Body, Delete, Get, Patch, Post, Put,Controller ,UseInterceptors,UseGuards} from "@nestjs/common";
-import { ParamId } from "src/decorators/param-id.decorator";
+import { ParamId } from "../decorators/param-id.decorator";
+                         /*src/decorators/param-id.decorator*/ 
 import { UserService } from "./user.service";
 import { UpdatePutUserDto } from "./dto/Update-Put.user.dto";
 import { UpdatePatchUserDto } from "./dto/Update-Patch.user.dto";
-import { Roles } from "src/decorators/role.decorator";
-import { Role } from "src/enums/role.enum";
-import { AuthGuard } from "src/auth/guards/auth.guard";
-import { RoleGuard } from "src/guardParaUser/role.guard";
-import { LogInterceptor } from "src/interceptions/log.interceptor";
+import { Roles } from "../decorators/role.decorator";
+                        /*src/decorators/role.decorator */
+import { Role } from "../enums/role.enum";
+                      /*src/enums/role.enum */
+import { AuthGuard } from "../auth/guards/auth.guard";
+                      /*src/auth/guards/auth.guard */
+import { RoleGuard } from "../guardParaUser/role.guard";
+                            /* src/guardParaUser/role.guard*/
+
+import { LogInterceptor } from "../interceptions/log.interceptor";
+                                /* src/interceptions/log.interceptor*/
 
 @Roles(Role.admin) // só o admin pode mexer nessas rotas 
 @UseGuards(AuthGuard,RoleGuard)   // todas as rotas vai ter o guard que eu criei 
