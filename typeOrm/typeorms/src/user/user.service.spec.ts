@@ -1,7 +1,8 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { UserService } from "./user.service";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import { UserEntity } from "./entity/user.entinty";
+import { userRepositoryMock } from "../testing/User.Repository.mock";
+
+
 
 describe(' UserService', () => {
 
@@ -13,19 +14,8 @@ describe(' UserService', () => {
                // o userService ele um provider  está no user.module é sempre e um provider 
                providers:[
                 UserService,
-                {
-                     provide: getRepositoryToken(UserEntity),
-                        useValue:{
-                            exit: jest.fn(),
-                         create:jest.fn(),
-                            save:jest.fn(),
-                            find:jest.fn(),
-                            findOneBy: jest.fn(), 
-                            update:jest.fn(),
-                            delete: jest.fn(),
+                userRepositoryMock
 
-                        } 
-                }
 
                
         
