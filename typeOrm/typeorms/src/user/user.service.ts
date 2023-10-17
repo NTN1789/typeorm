@@ -25,7 +25,7 @@ export class  UserService{
         if (
                 await this.usersRepository.exist({
                   where: {
-                 
+                    
                       
                     email: email,
                   },
