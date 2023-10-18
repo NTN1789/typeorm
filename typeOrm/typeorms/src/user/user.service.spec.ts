@@ -1,15 +1,19 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { UserService } from "./user.service";
 import { userRepositoryMock } from "../testing/User.Repository.mock";
-import { CreateUserDto } from "./dto/Create.user.dto";
-import { Role } from "../enums/role.enum";
 import { userEntityList } from "../testing/User-entity-list.mock";
+import { CreateUser} from "../testing/User.Create.dto";
+
+import { Repository } from "typeorm";
+import { UserEntity } from "./entity/user.entinty";
+import { getRepositoryToken } from "@nestjs/typeorm";
 
 
 
 describe(' UserService', () => {
 
         let userService:UserService;
+        let usersRepository:Repository<UserEntity>
 
     beforeEach( async () => {
  
@@ -25,30 +29,46 @@ describe(' UserService', () => {
         ] 
             }).compile(); 
             userService = module.get<UserService>(UserService);
+            usersRepository = module.get(getRepositoryToken(UserEntity))
+    
         });
 
 
         test("validar a definicao", () => {
                 expect(userService).toBeDefined();
-        });
+                expect(usersRepository).toBeDefined();
+          });
 
         describe("Create", () => {
-                test(' create' , async ()=> {
-                        const data:CreateUserDto ={
-                             birthAt:'200-01-01',
-                              email:'natanalmeida040@gmail.com',
-                              nome:'natan almeida',
-                               senha:'Banjo2020@',
-                               role:Role.user 
-                        } 
-                    const result = await  userService.create(data);
+                test('method Create' , async ()=> {
+                       
+                 jest.spyOn(usersRepository,'exist').mockResolvedValueOnce(false) 
+                   
+                   
+                        const result = await  userService.create(CreateUser);
                 
-                        expect(result).toEqual(userEntityList[0])
-                
+                        expect(result).toEqual(userEntityList[0]);
+                   
                 
                 });
         });
-     
+
+        describe ("Read", () => {
+                test('method list' , async ()=> {
+                       
+                    const result = await  userService.listUsuario();
+                        expect(result).toEqual(userEntityList);
+                })
+
+                test('method show' , async ()=> {
+                        jest.spyOn(usersRepository,'exist').mockResolvedValueOnce(false) 
+                        const result = await  userService.show(1);
+                        expect(result).toEqual(userEntityList[0]);
+                
+                })
+
+                })
+
 
 
 });

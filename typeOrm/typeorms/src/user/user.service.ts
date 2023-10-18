@@ -5,6 +5,7 @@ import { UpdatePatchUserDto } from "./dto/Update-Patch.user.dto"
 import {Repository} from "typeorm"
 import { UserEntity } from "./entity/user.entinty";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
 
 @Injectable()
 export class  UserService{
@@ -24,16 +25,19 @@ export class  UserService{
 
         if (
                 await this.usersRepository.exist({
-                  where: {
+                 
+                    where:{
+                      email,
+                      nome
+
+                    }
                     
-                      
-                    email: email,
-                  },
+                
                 })
-              ) {
+              )  {
                 throw new BadRequestException('Este e-mail já está sendo usado.');
                
-        }
+        } 
               const user = this.usersRepository.create({
                         email,
                         nome,

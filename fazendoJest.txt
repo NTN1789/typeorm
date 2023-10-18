@@ -1,1 +1,4 @@
 o mock e algo simuladar é uma simulação 
+
+
+ jest.spyOn(usersRepository,'exist').mockResolvedValueOnce(false)  //espionar a função é colocar false e depois volta sendo true  por conta do mock
